@@ -1,4 +1,8 @@
 # DroidBlox
+
+# THIS BOOTSTRAPPER IS NOT WORKING ANYMORE!
+Due to Roblox implementing a new anticheat that restricts root, I have to develop an entire new bootstrapper on kotlin. Check it out [here](https://github.com/meowstrapper/droidblox-kt)
+
 <div align="center">
 <img src="assets/icon.png" height=200>
 <img src="assets/features.png">
