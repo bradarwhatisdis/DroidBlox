@@ -130,11 +130,18 @@ jobs:
       #     echo "P4A_RELEASE_KEYALIAS=$P4A_RELEASE_KEYALIAS" >> $GITHUB_ENV
       #     echo "P4A_RELEASE_KEYALIAS_PASSWD=$P4A_RELEASE_KEYALIAS_PASSWD" >> $GITHUB_ENV
       
+      # Create pip constraints for build isolation
+      - name: Create pip constraints
+        run: |
+          echo "setuptools<70" > /tmp/pip-constraints.txt
+          echo "pip constraints file created"
+          cat /tmp/pip-constraints.txt
+
       # Build with Buildozer
       - name: Build with Buildozer
         id: buildozer
         env:
-          PIP_NO_BUILD_ISOLATION: false
+          PIP_CONSTRAINT: /tmp/pip-constraints.txt
         run: |
           yes | buildozer -v android ${{ github.event.inputs.APK_TYPE }}
         # yes | buildozer -v android release
