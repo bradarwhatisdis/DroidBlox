@@ -134,10 +134,13 @@ jobs:
       - name: Patch p4a pyjnius recipe
         run: |
           git clone --depth=1 -b develop https://github.com/meowstrapper/python-for-android.git /tmp/p4a-patched
-          sed -i 's/hostpython_prerequisites = \["Cython<3.2"\]/hostpython_prerequisites = ["Cython<3.2", "setuptools<70"]\n    extra_build_args = ["--no-isolation"]/' \
-            /tmp/p4a-patched/pythonforandroid/recipes/pyjnius/__init__.py
-          echo "Patched p4a pyjnius recipe:"
-          cat /tmp/p4a-patched/pythonforandroid/recipes/pyjnius/__init__.py
+          # Patch base PyProjectRecipe to always use --no-isolation and pin setuptools
+          sed -i 's/extra_build_args = \[\]/extra_build_args = ["--no-isolation"]/' \
+            /tmp/p4a-patched/pythonforandroid/recipe.py
+          sed -i 's/"pip", "setuptools"/"pip", "setuptools<70"/' \
+            /tmp/p4a-patched/pythonforandroid/recipe.py
+          echo "Patched PyProjectRecipe base class:"
+          grep -n "extra_build_args\|setuptools" /tmp/p4a-patched/pythonforandroid/recipe.py | head -5
 
       # Configure buildozer to use patched p4a
       - name: Configure buildozer for patched p4a
