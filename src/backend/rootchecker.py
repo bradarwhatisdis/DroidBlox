@@ -7,7 +7,7 @@ import subprocess
 
 TAG = "DBRootChecker" + ": "
 
-__all__ = ["suBinaryPath", "checkForRootAcess"]
+__all__ = ["suBinaryPath", "checkForRootAccess"]
 
 def suBinaryToUse() -> Union[bool, str]:
     for i in ["/system/bin/su", "/system/xbin/su", "/system_ext/bin/su", "/sbin/su"]:
@@ -26,5 +26,5 @@ def checkForRootAccess():
         if checkRoot.decode().rstrip() == "check":
             return True
     except Exception as e:
-        Logger.warn(TAG + f"Error while checking root: {e}")
+        Logger.warning(TAG + f"Error while checking root: {e}")
         return False

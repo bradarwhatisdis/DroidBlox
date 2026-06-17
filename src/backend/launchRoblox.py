@@ -20,6 +20,8 @@ TAG = "DBLaunchRoblox" + ": "
 
 __all__ = ["launchRoblox"]
 
+_activeWatcherSession = None
+
 if platform == "android":
     from android import mActivity # type: ignore
     from jnius import autoclass, cast, JavaException
@@ -60,7 +62,12 @@ if platform == "android":
             return
         
         if currentSettings["enableActivityTracking"]:
-            Logger.info(TAG + "Starting activity tracker")
-            ActivityWatcherSession().start()
+            global _activeWatcherSession
+            if _activeWatcherSession is not None:
+                Logger.info(TAG + "Activity tracker already running, skipping")
+            else:
+                Logger.info(TAG + "Starting activity tracker")
+                _activeWatcherSession = ActivityWatcherSession()
+                _activeWatcherSession.start()
 else:
     Logger.info(TAG + f"Running on {platform}, not importing.")

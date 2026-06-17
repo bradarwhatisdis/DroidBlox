@@ -64,7 +64,7 @@ class RPCSession:
         self._heartbeatStop.set()
         try:
             self.ws.close()
-        except: ...
+        except Exception: ...
     
     def reconnect(self):
         Logger.debug(TAG + "Reconnecting RPC")

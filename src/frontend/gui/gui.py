@@ -53,8 +53,8 @@ class DroidBloxGUI(MDApp):
         return MDScreen(
             MDNavigationLayout(MDScreenManager(
                 Integrations(),
-                # FFlags(),
-                # FFlagsEditor(),
+                FFlags(),
+                FFlagsEditor(),
                 PlayLogs(),
                 About(),
                 transition = MDSharedAxisTransition(),
@@ -73,11 +73,11 @@ class DroidBloxGUI(MDApp):
                     callback = self._switchScreen,
                     selected = BooleanProperty(True)
                     ),
-                    # NavigationDrawerItem(
-                    #     icon = "flag",
-                    #     text = "FastFlags",
-                    #     callback = self._switchScreen
-                    # ),
+                    NavigationDrawerItem(
+                        icon = "flag",
+                        text = "FastFlags",
+                        callback = self._switchScreen
+                    ),
                     NavigationDrawerItem(
                         icon = "gamepad-variant",
                         text = "Play Logs",
@@ -118,16 +118,16 @@ class DroidBloxGUI(MDApp):
         Logger.debug(TAG + f"Switching screen to {screenToSwitch}")
         self.root.get_ids().ScreenManager.current = screenToSwitch
     
-    @scheduleInThread
     def antiChevstrap(self):
         from kivy.utils import platform
         if platform == "android":
-            from android import mActivity # type: ignore
-            from jnius import autoclass, cast
+            try:
+                from android import mActivity # type: ignore
+                from jnius import autoclass, cast
 
-            currentActivity = cast('android.app.Activity', mActivity)
-            chevstrap = currentActivity.getPackageManager().getLaunchIntentForPackage("com.chevstrap.rbx")
-            if chevstrap:
-                Logger.error(TAG + "meowers..")
-                import ctypes
-                ctypes.string_at(0)
+                currentActivity = cast('android.app.Activity', mActivity)
+                chevstrap = currentActivity.getPackageManager().getLaunchIntentForPackage("com.chevstrap.rbx")
+                if chevstrap:
+                    Logger.warning(TAG + "Chevstrap detected! Some features may not work correctly.")
+            except Exception as e:
+                Logger.error(TAG + f"Error checking for Chevstrap: {e}")
