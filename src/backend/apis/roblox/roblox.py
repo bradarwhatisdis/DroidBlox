@@ -12,7 +12,7 @@ def getGameInfo(universeIds: List[int]) -> List[Game]:
     requestTo = f"https://games.roblox.com/v1/games?universeIds={','.join([str(i) for i in universeIds])}"
 
     Logger.debug(TAG + f"Requesting GET to {requestTo}")
-    gameInfosReq = requests.get(requestTo)
+    gameInfosReq = requests.get(requestTo, timeout=10)
     if gameInfosReq.status_code != 200:
         Logger.error(TAG + f"Failed to get roblox game info. Got {gameInfosReq.status_code}\nText:\n{gameInfosReq.text}")
         return
@@ -28,7 +28,7 @@ def getUserInfo(userId: int) -> User:
     requestTo = f"https://users.roblox.com/v1/users/{userId}"
 
     Logger.debug(TAG + f"Requesting GET to {requestTo}")
-    usernameReq = requests.get(requestTo)
+    usernameReq = requests.get(requestTo, timeout=10)
     if usernameReq.status_code != 200:
         Logger.error(TAG + f"Failed to get roblox user info. Got {usernameReq.status_code}\nText:\n{usernameReq.text}")
         return
@@ -40,7 +40,7 @@ def getThumbnails(thumbnails: List[Thumbnail]) -> List[str]:
     jsonToSend = [thumbnail.toDict() for thumbnail in thumbnails]
 
     Logger.debug(TAG + f"Requesting POST to {requestTo} with json {jsonToSend}")
-    thumbnailsReq = requests.post(requestTo, json = jsonToSend)
+    thumbnailsReq = requests.post(requestTo, json = jsonToSend, timeout=10)
     if thumbnailsReq.status_code != 200:
         Logger.error(TAG + f"Failed to get roblox thumbnail(s). Got {thumbnailsReq.status_code}\nText:\n{thumbnailsReq.text}")
         return

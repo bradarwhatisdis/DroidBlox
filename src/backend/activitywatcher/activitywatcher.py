@@ -51,7 +51,7 @@ with open(paths.dbCheckRobloxScript, "w") as writeCheckRobloxScript:
 def getIPLocationWithIPInfo(ip: str):
     requestTo = f"https://ipinfo.io/{ip}/json"
     Logger.debug(TAG + f"Requesting GET to {requestTo}")
-    ipInfoReq = requests.get(requestTo)
+    ipInfoReq = requests.get(requestTo, timeout=10)
     if ipInfoReq.status_code != 200:
         Logger.error(TAG + f"Failed to get the ip location with IPInfo.io. Got {ipInfoReq.status_code}\nText:\n{ipInfoReq.text}")
         return
@@ -66,7 +66,7 @@ def getIPLocationWithRoSeal(ip: str):
     if not cachedRoSealListOfIP:
         requestTo = f"https://raw.githubusercontent.com/RoSeal-Extension/Top-Secret-Thing/refs/heads/main/data/datacenters.json"
         Logger.debug(TAG + f"Requesting GET to {requestTo}")
-        rosealReq = requests.get(requestTo)
+        rosealReq = requests.get(requestTo, timeout=10)
         if rosealReq.status_code != 200:
             Logger.error(TAG + f"Failed to get the list of ip locations. Got {rosealReq.status_code}\nText:\n{rosealReq.text}")
             return

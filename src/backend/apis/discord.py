@@ -14,7 +14,7 @@ def getMPOfUrls(token: str, urls: List[str]) -> List[str]:
     headers = {"Authorization": token}
 
     Logger.debug(TAG + f"Requesting POST to {requestTo} with json {jsonToSend}")
-    mediaProxyReq = requests.post(requestTo, json = jsonToSend, headers = headers)
+    mediaProxyReq = requests.post(requestTo, json = jsonToSend, headers = headers, timeout=10)
     if mediaProxyReq.status_code != 200:
         Logger.error(TAG + f"Failed to get media proxy of urls. Got {mediaProxyReq.status_code}\nText:\n{mediaProxyReq.text}")
         return
@@ -26,7 +26,7 @@ def getUsername(token: str) -> str:
     headers = {"Authorization": token}
 
     Logger.debug(TAG + f"Requesting GET to {requestTo}")
-    usernameReq = requests.get(requestTo, headers = headers)
+    usernameReq = requests.get(requestTo, headers = headers, timeout=10)
     if usernameReq.status_code != 200:
         Logger.error(TAG + f"Failed to get the discord username. Got {usernameReq.status_code}\nText:\n{usernameReq.text}")
         return
@@ -40,6 +40,6 @@ def logout(token: str):
     headers = {"Authorization": token}
 
     Logger.debug(TAG + f"Requesting POST to {requestTo}")
-    logoutReq = requests.post(requestTo, json = jsonToSend, headers = headers)
-    if logoutReq.status_code != 204 or logoutReq.status_code != 200:
+    logoutReq = requests.post(requestTo, json = jsonToSend, headers = headers, timeout=10)
+    if logoutReq.status_code != 204 and logoutReq.status_code != 200:
         Logger.error(TAG + f"Failed to logout discord token. Got {logoutReq.status_code}\nText:\n{logoutReq.text}")
