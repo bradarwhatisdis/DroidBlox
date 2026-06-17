@@ -138,12 +138,12 @@ jobs:
           # This ensures the host python passes correct setuptools version to build backend
           sed -i 's/"pip", "setuptools"/"pip", "setuptools<70"/' \
             /tmp/p4a-patched/pythonforandroid/recipe.py
-          # Add --no-isolation to pyjnius and android to use host setuptools<70
-          for recipe in pyjnius android; do
+          # Add --no-isolation to recipes using PyProjectRecipe to avoid setuptools>=70
+          for recipe in pyjnius android kivy; do
             sed -i '/^class [A-Za-z]*Recipe/a\    extra_build_args = ["--no-isolation"]' \
               /tmp/p4a-patched/pythonforandroid/recipes/$recipe/__init__.py
           done
-          echo "P4A patched: setuptools<70 pinned + --no-isolation for pyjnius/android"
+          echo "P4A patched: setuptools<70 pinned + --no-isolation for pyjnius/android/kivy"
 
       # Configure buildozer to use patched p4a
       - name: Configure buildozer for patched p4a
