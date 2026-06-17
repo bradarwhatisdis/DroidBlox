@@ -17,7 +17,7 @@ try:
     # for testing purposes (e.g., not testing on android)
     from frontend.webview import DiscordLoginWebView
     from backend.launchRoblox import launchRoblox
-except:
+except ImportError:
     Logger.debug(TAG + "Not importing DiscordLoginWebview and launchRoblox")
     def launchRoblox(): ...
 

@@ -13,7 +13,7 @@ from frontend.gui.elements import (
 
 TAG = "DBFFlagsScreen" + ": "
 
-__all__ = ["PlayLogs"]
+__all__ = ["FFlags"]
 
 class FFlags(BasicScreen):
     def __init__(self, *args, **kwargs):
@@ -250,7 +250,7 @@ class FFlags(BasicScreen):
                 title = "Feedback button",
                 subtitle = "Remove Feedback button",
                 callback = lambda value: (
-                    fflags.writeFFlag("FFlagDisableFeedbackSoothsayerCheck", "True") if value else fflags.removeFFlags(["FFlagDisableFeedbackSoothsayerCheck"])
+                    fflags.writeFFlag("FFlagDisableFeedbackSoothsayerCheck", "True") if value else fflags.deleteFFlags(["FFlagDisableFeedbackSoothsayerCheck"])
                 ),
                 id = "removeFeedbackButton"
             ),
@@ -258,7 +258,7 @@ class FFlags(BasicScreen):
                 title = "Language selector",
                 subtitle = "Remove Language selector",
                 callback = lambda value: (
-                    fflags.writeFFlag("FIntV1MenuLanguageSelectionFeaturePerMillageRollout", "0") if value else fflags.removeFFlags(["FIntV1MenuLanguageSelectionFeaturePerMillageRollout"])
+                    fflags.writeFFlag("FIntV1MenuLanguageSelectionFeaturePerMillageRollout", "0") if value else fflags.deleteFFlags(["FIntV1MenuLanguageSelectionFeaturePerMillageRollout"])
                 ),
                 id = "removeLanguageSelector"
             ),
@@ -266,7 +266,7 @@ class FFlags(BasicScreen):
                 title = "Framerate cap",
                 subtitle = "Remove Framerate cap",
                 callback = lambda value: (
-                    fflags.writeFFlag("FFlagGameBasicSettingsFramerateCap5", "False") if value else fflags.removeFFlags(["FFlagGameBasicSettingsFramerateCap5"])
+                    fflags.writeFFlag("FFlagGameBasicSettingsFramerateCap5", "False") if value else fflags.deleteFFlags(["FFlagGameBasicSettingsFramerateCap5"])
                 ),
                 id = "removeFramerateCap"
             ),
@@ -274,7 +274,7 @@ class FFlags(BasicScreen):
                 title = "Chat translation",
                 subtitle = "Remove Chat translation",
                 callback = lambda value: (
-                    fflags.writeFFlag("FFlagChatTranslationSettingEnabled3", "False") if value else fflags.removeFFlags(["FFlagChatTranslationSettingEnabled3"])
+                    fflags.writeFFlag("FFlagChatTranslationSettingEnabled3", "False") if value else fflags.deleteFFlags(["FFlagChatTranslationSettingEnabled3"])
                 ),
                 id = "removeChatTranslation"
             ),
@@ -291,7 +291,7 @@ class FFlags(BasicScreen):
                 title = "Ping breakdown",
                 subtitle = "Sends ping information to the Roblox console.",
                 callback = lambda value: (
-                    fflags.writeFFlag("DFFlagDebugPrintDataPingBreakDown", "False") if value else fflags.removeFFlags(["DFFlagDebugPrintDataPingBreakDown"])
+                    fflags.writeFFlag("DFFlagDebugPrintDataPingBreakDown", "False") if value else fflags.deleteFFlags(["DFFlagDebugPrintDataPingBreakDown"])
                 ),
                 id = "pingBreakdown"
             )
