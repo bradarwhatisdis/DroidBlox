@@ -130,24 +130,35 @@ jobs:
       #     echo "P4A_RELEASE_KEYALIAS=$P4A_RELEASE_KEYALIAS" >> $GITHUB_ENV
       #     echo "P4A_RELEASE_KEYALIAS_PASSWD=$P4A_RELEASE_KEYALIAS_PASSWD" >> $GITHUB_ENV
       
-      # Clone and patch p4a to fix setuptools build_meta issue
-      - name: Patch p4a pyjnius recipe
+      # Clone & patch p4a to fix setuptools build_meta issue
+      - name: Patch p4a for setuptools compatibility
         run: |
           git clone --depth=1 -b develop https://github.com/meowstrapper/python-for-android.git /tmp/p4a-patched
-          # Patch base PyProjectRecipe to always use --no-isolation and pin setuptools
-          sed -i 's/extra_build_args = \[\]/extra_build_args = ["--no-isolation"]/' \
-            /tmp/p4a-patched/pythonforandroid/recipe.py
+          # Pin setuptools<70 in hostpython to avoid build_meta removal in isolated env
+          # This ensures the host python passes correct setuptools version to build backend
           sed -i 's/"pip", "setuptools"/"pip", "setuptools<70"/' \
             /tmp/p4a-patched/pythonforandroid/recipe.py
-          echo "Patched PyProjectRecipe base class:"
-          grep -n "extra_build_args\|setuptools" /tmp/p4a-patched/pythonforandroid/recipe.py | head -5
+          # Add build-backend to pyjnius pyproject.toml to avoid legacy backend issue
+          cat > /tmp/p4a-patched/pythonforandroid/recipes/pyjnius/fix_backend.patch << 'EOF'
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,4 +1,5 @@
+ [build-system]
++build-backend = "setuptools.build_meta"
+ requires = [
+     "setuptools>=58.0.0",
+     "wheel",
+EOF
+          sed -i 's/patches = \[/patches = ["fix_backend.patch", /' \
+            /tmp/p4a-patched/pythonforandroid/recipes/pyjnius/__init__.py
+          echo "P4A patched: setuptools<70 pinned + pyjnius build-backend added"
 
       # Configure buildozer to use patched p4a
       - name: Configure buildozer for patched p4a
         run: |
           echo "p4a.source_dir = /tmp/p4a-patched" >> buildozer.spec
 
-      # Build with Buildozer (using patched local p4a with --no-isolation)
+      # Build with Buildozer
       - name: Build with Buildozer
         id: buildozer
         run: |
