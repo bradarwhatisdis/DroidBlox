@@ -138,22 +138,10 @@ jobs:
           # This ensures the host python passes correct setuptools version to build backend
           sed -i 's/"pip", "setuptools"/"pip", "setuptools<70"/' \
             /tmp/p4a-patched/pythonforandroid/recipe.py
-          # Add build-backend + pin setuptools<70 in pyjnius pyproject.toml
-          PATCH_FILE=/tmp/p4a-patched/pythonforandroid/recipes/pyjnius/fix_backend.patch
-          echo '--- a/pyproject.toml' > "$PATCH_FILE"
-          echo '+++ b/pyproject.toml' >> "$PATCH_FILE"
-          echo '@@ -1,6 +1,7 @@' >> "$PATCH_FILE"
-          echo ' [build-system]' >> "$PATCH_FILE"
-          echo '+build-backend = "setuptools.build_meta"' >> "$PATCH_FILE"
-          echo ' requires = [' >> "$PATCH_FILE"
-          echo '-    "setuptools>=58.0.0",' >> "$PATCH_FILE"
-          echo '+    "setuptools>=58.0.0,<70",' >> "$PATCH_FILE"
-          echo '     "wheel",' >> "$PATCH_FILE"
-          echo '     "Cython~=3.1.2",' >> "$PATCH_FILE"
-          echo ' ]' >> "$PATCH_FILE"
-          sed -i 's/patches = \[/patches = ["fix_backend.patch", /' \
+          # Add --no-isolation to pyjnius to use host setuptools<70
+          sed -i '/^class PyjniusRecipe/a\    extra_build_args = ["--no-isolation"]' \
             /tmp/p4a-patched/pythonforandroid/recipes/pyjnius/__init__.py
-          echo "P4A patched: setuptools<70 pinned + pyjnius build-backend added"
+          echo "P4A patched: setuptools<70 pinned + pyjnius --no-isolation"
 
       # Configure buildozer to use patched p4a
       - name: Configure buildozer for patched p4a
