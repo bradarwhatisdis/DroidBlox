@@ -45,7 +45,7 @@ def writeSetting(setting: str, value: Any):
 
 try:
     readSettings()
-except:
+except (FileNotFoundError, json.JSONDecodeError, OSError):
     Logger.info(TAG + "Creating settings file")
     with open(paths.dbSettings, "w") as writeSettings:
         json.dump(settingTemplate, writeSettings)

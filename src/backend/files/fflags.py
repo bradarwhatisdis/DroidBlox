@@ -51,7 +51,7 @@ def deleteFFlags(fflags: List[str]):
     for fflag in fflags:
         try:
             oldFFlags.pop(fflag)
-        except:
+        except KeyError:
             Logger.warning(TAG + f"Failed to remove fflag {fflag}, ignoring")
     writeToFFlags(json.dumps(oldFFlags, indent = 4))
     Logger.debug(TAG + f"New fflags: {oldFFlags}")
@@ -62,7 +62,7 @@ def applyFFlagsToRoblox():
 
 try:
     readFFlags()
-except:
+except (FileNotFoundError, json.JSONDecodeError, OSError):
     Logger.info(TAG + "Creating fflag file")
     with open(paths.dbFFlags, "w") as writeFFlag:
         json.dump({}, writeFFlag)
