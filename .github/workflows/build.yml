@@ -130,6 +130,20 @@ jobs:
       #     echo "P4A_RELEASE_KEYALIAS=$P4A_RELEASE_KEYALIAS" >> $GITHUB_ENV
       #     echo "P4A_RELEASE_KEYALIAS_PASSWD=$P4A_RELEASE_KEYALIAS_PASSWD" >> $GITHUB_ENV
       
+      # Clone and patch p4a to fix setuptools build_meta issue
+      - name: Patch p4a pyjnius recipe
+        run: |
+          git clone --depth=1 -b develop https://github.com/meowstrapper/python-for-android.git /tmp/p4a-patched
+          sed -i 's/hostpython_prerequisites = \["Cython<3.2"\]/hostpython_prerequisites = ["Cython<3.2", "setuptools<70"]\n    extra_build_args = ["--no-isolation"]/' \
+            /tmp/p4a-patched/pythonforandroid/recipes/pyjnius/__init__.py
+          echo "Patched p4a pyjnius recipe:"
+          cat /tmp/p4a-patched/pythonforandroid/recipes/pyjnius/__init__.py
+
+      # Configure buildozer to use patched p4a
+      - name: Configure buildozer for patched p4a
+        run: |
+          echo "p4a.source_dir = /tmp/p4a-patched" >> buildozer.spec
+
       # Build with Buildozer (using patched local p4a with --no-isolation)
       - name: Build with Buildozer
         id: buildozer
