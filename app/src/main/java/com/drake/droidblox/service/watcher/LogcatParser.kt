@@ -1,5 +1,6 @@
 package com.drake.droidblox.service.watcher
 
+import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import java.util.regex.Pattern
