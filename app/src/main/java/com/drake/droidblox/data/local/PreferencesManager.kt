@@ -45,7 +45,7 @@ class PreferencesManager(private val context: Context) {
             when (key) {
                 "enableActivityTracking" -> prefs[Keys.ENABLE_ACTIVITY_TRACKING] = value as Boolean
                 "showServerLocation" -> prefs[Keys.SHOW_SERVER_LOCATION] = value as Boolean
-                "token" -> prefs[Keys.TOKEN] = value as? String
+                "token" -> prefs[Keys.TOKEN] = value as String
                 "showGameActivity" -> prefs[Keys.SHOW_GAME_ACTIVITY] = value as Boolean
                 "allowActivityJoining" -> prefs[Keys.ALLOW_ACTIVITY_JOINING] = value as Boolean
                 "showRobloxUser" -> prefs[Keys.SHOW_ROBLOX_USER] = value as Boolean
@@ -56,7 +56,11 @@ class PreferencesManager(private val context: Context) {
 
     suspend fun setToken(token: String?) {
         context.dataStore.edit { prefs ->
-            prefs[Keys.TOKEN] = token
+            if (token != null) {
+                prefs[Keys.TOKEN] = token
+            } else {
+                prefs.remove(Keys.TOKEN)
+            }
         }
     }
 

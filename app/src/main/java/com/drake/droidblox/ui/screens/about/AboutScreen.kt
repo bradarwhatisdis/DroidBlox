@@ -83,7 +83,7 @@ fun AboutScreen(onOpenDrawer: () -> Unit) {
             )
 
             Spacer(Modifier.height(24.dp))
-            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            Divider(modifier = Modifier.padding(horizontal = 16.dp))
             Spacer(Modifier.height(8.dp))
 
             SectionHeader("Links")
@@ -104,7 +104,7 @@ fun AboutScreen(onOpenDrawer: () -> Unit) {
                 onClick = { openUrl(context, "https://discord.gg/droidblox") }
             )
 
-            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            Divider(modifier = Modifier.padding(horizontal = 16.dp))
             SectionHeader("Credits")
 
             Text(

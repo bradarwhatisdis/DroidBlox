@@ -1,8 +1,10 @@
 package com.drake.droidblox.data.remote.discord
 
 import com.drake.droidblox.data.models.DiscordUser
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.putJsonArray
 import okhttp3.MediaType.Companion.toMediaType
@@ -10,7 +12,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 
-class DiscordApi(private val tokenProvider: () -> String?) {
+class DiscordApi(private val tokenProvider: suspend () -> String?) {
 
     private val client = OkHttpClient.Builder().build()
     private val json = Json { ignoreUnknownKeys = true }
@@ -29,7 +31,7 @@ class DiscordApi(private val tokenProvider: () -> String?) {
         return try {
             val jsonBody = buildJsonObject {
                 putJsonArray("urls") {
-                    urls.forEach { add(it) }
+                    urls.forEach { add(JsonPrimitive(it)) }
                 }
             }
             val request = Request.Builder()
@@ -43,9 +45,11 @@ class DiscordApi(private val tokenProvider: () -> String?) {
             val body = response.body?.string() ?: return Result.success(urls)
             if (!response.isSuccessful) return Result.success(urls)
 
+            val root = json.decodeFromString<JsonObject>(body)
+            val data = root["data"]?.toString() ?: return Result.success(urls)
             val assets = json.decodeFromString<List<AssetResponse>>(
                 kotlinx.serialization.builtins.ListSerializer(AssetResponse.serializer()),
-                json.parseToJsonElement(body).jsonObject["data"].toString()
+                data
             )
             Result.success(assets.map { it.url })
         } catch (e: Exception) {
@@ -68,7 +72,7 @@ class DiscordApi(private val tokenProvider: () -> String?) {
                 client.newCall(request).execute()
             }
             val body = response.body?.string() ?: throw Exception("Empty response")
-            if (!response.isSuccessful) throw Exception("HTTP ${response.code()}: $body")
+            if (!response.isSuccessful) throw Exception("HTTP ${response.code}: $body")
             Result.success(parser(body))
         } catch (e: Exception) {
             Result.failure(e)
@@ -87,7 +91,7 @@ class DiscordApi(private val tokenProvider: () -> String?) {
             }
             if (!response.isSuccessful) {
                 response.body?.string()
-                throw Exception("HTTP ${response.code()}")
+                throw Exception("HTTP ${response.code}")
             }
             Result.success(Unit)
         } catch (e: Exception) {
@@ -95,5 +99,6 @@ class DiscordApi(private val tokenProvider: () -> String?) {
         }
     }
 
+    @Serializable
     private data class AssetResponse(val id: String = "", val url: String = "")
 }

@@ -192,7 +192,7 @@ class DiscordRpcService(
                 delay(heartbeatInterval)
                 val msg = buildJsonObject {
                     put("op", GatewayOp.HEARTBEAT)
-                    put("d", lastSeq ?: kotlinx.serialization.json.JsonNull)
+                    put("d", lastSeq?.let { JsonPrimitive(it) } ?: JsonNull)
                 }
                 webSocket?.send(msg.toString())
             }

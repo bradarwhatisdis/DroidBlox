@@ -54,7 +54,7 @@ fun PlayLogsScreen(
             )
             thumbsResult.onSuccess { items ->
                 gameThumbnails = items.mapIndexed { i, item ->
-                    universeIds.getOrNull(i) to item.imageUrl
+                    universeIds.getOrNull(i)!! to item.imageUrl
                 }.filter { it.second.isNotBlank() }.toMap()
             }
         }

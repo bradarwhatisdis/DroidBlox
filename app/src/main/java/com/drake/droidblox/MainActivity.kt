@@ -135,7 +135,7 @@ fun DroidBloxApp(
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(horizontal = 28.dp, vertical = 16.dp)
                 )
-                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                Divider(modifier = Modifier.padding(horizontal = 16.dp))
                 Spacer(Modifier.height(8.dp))
 
                 drawerScreens.forEach { screen ->
@@ -152,7 +152,7 @@ fun DroidBloxApp(
                 }
 
                 Spacer(Modifier.weight(1f))
-                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                Divider(modifier = Modifier.padding(horizontal = 16.dp))
                 Text(
                     text = "v1.0.0",
                     style = MaterialTheme.typography.bodySmall,

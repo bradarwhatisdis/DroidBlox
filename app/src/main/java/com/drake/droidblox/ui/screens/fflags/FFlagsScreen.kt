@@ -126,7 +126,7 @@ fun FFlagsScreen(
             )
 
             if (settings.applyFFlags) {
-                HorizontalDivider()
+                Divider()
                 SectionHeader("Presets")
                 SettingsButton(
                     title = "Disable Roblox Telemetry",
@@ -147,7 +147,7 @@ fun FFlagsScreen(
                     }
                 )
 
-                HorizontalDivider()
+                Divider()
                 SectionHeader("Graphics")
                 SettingsToggle(
                     title = "Vulkan Rendering",
@@ -205,7 +205,7 @@ fun FFlagsScreen(
                     }
                 )
 
-                HorizontalDivider()
+                Divider()
                 SectionHeader("UI")
                 SettingsToggle(
                     title = "Disable VR",
@@ -244,7 +244,7 @@ fun FFlagsScreen(
                     }
                 )
 
-                HorizontalDivider()
+                Divider()
                 SectionHeader("Debug")
                 SettingsToggle(
                     title = "Show FPS Counter",

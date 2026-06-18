@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -103,7 +105,7 @@ fun IntegrationsScreen(
                     enabled = canLaunchRoblox
                 )
 
-                HorizontalDivider()
+                Divider()
                 SectionHeader("Activity Tracking")
                 SettingsToggle(
                     title = "Enable activity tracking",
@@ -124,7 +126,7 @@ fun IntegrationsScreen(
                     }
                 )
 
-                HorizontalDivider()
+                Divider()
                 SectionHeader("Discord")
                 if (discordUsername != null) {
                     SettingsButton(
@@ -184,7 +186,7 @@ fun IntegrationsScreen(
                     )
                 }
 
-                HorizontalDivider()
+                Divider()
                 SectionHeader("DroidBlox")
                 SettingsButton(
                     title = "Version 1.0.0",

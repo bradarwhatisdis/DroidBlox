@@ -24,7 +24,7 @@ class ActivityWatcher(
     private val robloxApi: RobloxApi,
     private val ipGeolocation: IpGeolocation,
     private val rpcService: DiscordRpcService?,
-    private val settingsProvider: () -> AppSettings
+    private val settingsProvider: suspend () -> AppSettings
 ) {
     private val playLogStorage = PlayLogStorage(context)
     private val notificationHelper = NotificationHelper(context)
@@ -77,8 +77,8 @@ class ActivityWatcher(
         monitoringProcess = try {
             val proc = Runtime.getRuntime().exec(arrayOf("sh", "-c", "logcat --pid=$pid -v raw"))
             val reader = BufferedReader(InputStreamReader(proc.inputStream))
-            launch(Dispatchers.IO) {
-                var line: String?
+            scope.launch(Dispatchers.IO) {
+                var line: String? = null
                 while (isActive && reader.readLine().also { line = it } != null) {
                     handleLogLine(line ?: "")
                 }
@@ -188,7 +188,7 @@ class ActivityWatcher(
         resetSession()
     }
 
-    private fun handleBloxstrapRpc(msg: BloxstrapRpcMessage) {
+    private suspend fun handleBloxstrapRpc(msg: BloxstrapRpcMessage) {
         when (msg.command) {
             "SetRichPresence" -> {
                 val settings = settingsProvider()

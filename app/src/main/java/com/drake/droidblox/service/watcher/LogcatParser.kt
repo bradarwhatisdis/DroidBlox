@@ -1,5 +1,7 @@
 package com.drake.droidblox.service.watcher
 
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import java.util.regex.Pattern
 
 data class GameJoinInfo(
@@ -81,7 +83,7 @@ object LogcatParser {
                 val command = obj["command"]?.jsonPrimitive?.contentOrNull ?: ""
                 val dataObj = obj["data"]?.jsonObject
                 val data = mutableMapOf<String, String>()
-                dataObj?.forEach { (k, v) -> data[k] = v.jsonPrimitive.contentOrNull ?: "" }
+                dataObj?.entries?.forEach { (k, v) -> data[k] = v.jsonPrimitive.contentOrNull ?: "" }
                 ParseResult(bloxstrapMessage = BloxstrapRpcMessage(command, data))
             } catch (_: Exception) { null }
         }
